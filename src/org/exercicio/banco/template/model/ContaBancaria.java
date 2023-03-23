@@ -3,12 +3,12 @@ package org.exercicio.banco.template.model;
 import java.util.Objects;
 
 /**
-*
-* Nome:
-* Curso:
-* Matrícula:
-* 
-*/
+ *
+ * Nome: Suelen Salvino 
+ * Curso: TSI 
+ * Matrícula: 20221TSIIG0333
+ * 
+ */
 public class ContaBancaria {
 	private int numeroConta;
 	private double saldo;
@@ -16,8 +16,9 @@ public class ContaBancaria {
 	private boolean status;
 
 	/**
-	 * Construtor recebe apenas numeroConta e titular. Saldo e status iniciam
-	 * com valores padrão: saldo com 0 e status com true.
+	 * Construtor recebe apenas numeroConta e titular. Saldo e status iniciam com
+	 * valores padrão: saldo com 0 e status com true.
+	 * 
 	 * @param numeroConta
 	 * @param titular
 	 */
@@ -26,7 +27,7 @@ public class ContaBancaria {
 		this.saldo = saldo;
 		this.status = true;
 	}
-	
+
 	public ContaBancaria(int numeroConta, String titular) {
 		this.numeroConta = numeroConta;
 		this.titular = titular;
@@ -35,15 +36,11 @@ public class ContaBancaria {
 	}
 
 	/*
-	 * OBS: RESPONDA A LISTA DE EXERCICIO COM A SEGUINTE SEQUENCIA:
-	 * 1) DEPOSITAR
-	 * 2) SACAR
-	 * 3) FECHARCONTA
-	 * 4) REABRIRCONTA
-	 * 5) REALIZARTRANSFERENCIA
+	 * OBS: RESPONDA A LISTA DE EXERCICIO COM A SEGUINTE SEQUENCIA: 1) DEPOSITAR 2)
+	 * SACAR 3) FECHARCONTA 4) REABRIRCONTA 5) REALIZARTRANSFERENCIA
 	 * 
-	 * */
-	
+	 */
+
 	/**
 	 * O metodo deve receber um valor a ser acrescido ao saldo. No entanto, deve-se
 	 * checar se o valor passado como argumento é maior que 0 (zero). Caso nao seja,
@@ -53,7 +50,12 @@ public class ContaBancaria {
 	 * @param valor
 	 */
 	public void depositar(double valor) {
-		
+		if (this.status && valor > 0) {
+			saldo += valor;
+		} else {
+			System.out.print("Valor invalido para deposito.");
+		}
+
 	}
 
 	/**
@@ -69,7 +71,17 @@ public class ContaBancaria {
 	 * @param valor
 	 */
 	public void sacar(double valor) {
-		
+		if (this.status == false) {
+			System.out.print("Conta inativa.");
+		} else if (valor <= 0) {
+			System.out.print("Valor inválido para saque.");
+		} else if (valor > this.saldo) {
+			System.out.print("Saldo insuficiente.");
+		} else {
+			saldo -= valor;
+
+		}
+
 	}
 
 	/**
@@ -81,7 +93,14 @@ public class ContaBancaria {
 	 * fechar a conta. Utilize System.out.print();
 	 */
 	public void fecharConta() {
-		
+		if (this.status == false) {
+			System.out.print("Conta ja inativa.");
+		} else if (this.saldo != 0) {
+			System.out.print("Conta com saldo. Nao eh possivel fecha-la.");
+		} else {
+			this.status = false;
+		}
+
 	}
 
 	/**
@@ -90,24 +109,38 @@ public class ContaBancaria {
 	 * ativa." deve ser exibida no console. Utilize System.out.print();
 	 */
 	public void reabrirConta() {
+		if (this.status == true) {
+			System.out.print("Conta já ativa.");
+		} else {
+			this.status = false;
+		}
 
 	}
 
 	/**
 	 * Metodo exige que seja passado o parametro quantia e contadestino, o qual ira
 	 * decrementar a quantia do saldo da conta que executa o metodo e incrementa a
-	 * mesma quantia no saldo da conta destino. Trate as condicoes na seguinte ordem:
-	 * Caso a conta de origem esteja desativada, exiba a msg no console:
-	 * "Conta de origem inativa.". Em seguida, verifique se a conta destino
-	 * tambem esta ativa, caso nao esteja exiba no console: 
-	 * "Conta de destino inativa.". Por fim, caso a quantia passada seja maior
-	 * que o saldo disponivel na conta de origem, a msg "Saldo insuficiente para
-	 * transferencia." deve ser exibida no console. Utilize System.out.print();
+	 * mesma quantia no saldo da conta destino. Trate as condicoes na seguinte
+	 * ordem: Caso a conta de origem esteja desativada, exiba a msg no console:
+	 * "Conta de origem inativa.". Em seguida, verifique se a conta destino tambem
+	 * esta ativa, caso nao esteja exiba no console: "Conta de destino inativa.".
+	 * Por fim, caso a quantia passada seja maior que o saldo disponivel na conta de
+	 * origem, a msg "Saldo insuficiente para transferencia." deve ser exibida no
+	 * console. Utilize System.out.print();
 	 * 
 	 * @param quantia
 	 * @param destino
 	 */
 	public void realizarTransferencia(double quantia, ContaBancaria destino) {
+		if (this.status == false) {
+			System.out.print("Conta de origem inativa.");
+		} else if (destino.status == false) {
+			System.out.print("Conta de destino inativa.");
+		} else if (quantia > this.saldo) {
+			System.out.print("Saldo insuficiente para transferencia.");
+		} else
+			this.saldo -= quantia;
+		destino.saldo += quantia;
 
 	}
 
@@ -127,21 +160,21 @@ public class ContaBancaria {
 		return status;
 	}
 
-	/**
-	 * Implemente o mehtodo hashCode
-	 */
 	@Override
 	public int hashCode() {
-		return 0;
+		return Objects.hash(numeroConta);
 	}
 
-	/**
-	 * Implemente o mehtodo equals
-	 */
 	@Override
 	public boolean equals(Object obj) {
-		return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ContaBancaria other = (ContaBancaria) obj;
+		return numeroConta == other.numeroConta;
 	}
-	
-	
+
 }
